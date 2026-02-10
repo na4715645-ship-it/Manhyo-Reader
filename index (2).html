@@ -17,8 +17,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
     text-align: center;
+    min-height: 100vh;
   }
 
   .hidden { display: none; }
@@ -29,7 +29,7 @@
     padding: 2rem;
   }
 
-  input[type="password"] {
+  input {
     padding: 10px;
     font-size: 1rem;
     width: 70%;
@@ -41,12 +41,13 @@
     margin-top: 1rem;
     font-size: 1rem;
     cursor: pointer;
-    background-color: #2196f3;
+    background: #2196f3;
     border: none;
     border-radius: 5px;
-    color: #fff;
+    color: white;
     transition: 0.2s;
   }
+
   button:hover { background: #1769aa; }
 
   #extensions {
@@ -64,6 +65,7 @@
     font-weight: 600;
     transition: 0.2s;
   }
+
   .ext-btn:hover { background: #444; }
 
   iframe {
@@ -74,10 +76,9 @@
   }
 
   #dynamic-text {
-    margin-top: 15px;
-    font-size: 1.1rem;
+    margin-top: 10px;
+    font-size: 1.15rem;
     color: #ffeb3b;
-    font-weight: 600;
   }
 </style>
 </head>
@@ -86,7 +87,7 @@
 
 <div id="login-container">
   <h1>Welcome to Manhyo Reader</h1>
-  <input type="password" id="password" placeholder="Enter Password">
+  <input type="password" id="password" placeholder="Enter password">
   <button onclick="checkPassword()">Enter</button>
   <p id="dynamic-text">Get ready for updates...</p>
 </div>
@@ -94,9 +95,6 @@
 <div id="main-container" class="hidden">
   <h1>Manhyo Extensions</h1>
   <div id="extensions"></div>
-
-  <p id="dynamic-text">Loading amazing content...</p>
-
   <iframe id="reader-frame" class="hidden"></iframe>
 </div>
 
@@ -107,42 +105,28 @@
   const passwordInput = document.getElementById("password");
   const extensionsDiv = document.getElementById("extensions");
   const readerFrame = document.getElementById("reader-frame");
-
-  const dynamicTextElems = document.querySelectorAll("#dynamic-text");
+  const dynamicText = document.getElementById("dynamic-text");
 
   const statusMessages = [
-    "New chapters might drop soon!",
-    "Check your favorite extensions above!",
-    "Stay tuned — latest manhwa updates!",
-    "Explore SirenScans, ValirScans, and more!",
-    "Ready to read? Click an extension!",
-    "Keep your eyes on ManhwaClan for more!",
-    "Discover hidden gems from FlameComics!"
+    "Select a source to begin reading!",
+    "Discover new chapters every day!",
+    "Find your favorite manhwa titles here!",
+    "Click a button to open a site!",
+    "Sites open if embedding is allowed!",
+    "If blocked, the site will open in a new tab!"
   ];
 
   function updateDynamicText() {
-    const random = statusMessages[Math.floor(Math.random() * statusMessages.length)];
-    dynamicTextElems.forEach(el => el.textContent = random);
+    dynamicText.textContent = statusMessages[Math.floor(Math.random() * statusMessages.length)];
   }
-
-  setInterval(updateDynamicText, 3000); // updates every 3 seconds:contentReference[oaicite:1]{index=1}
-  updateDynamicText(); // initial run
+  setInterval(updateDynamicText, 3000);
+  updateDynamicText();
 
   const extensions = [
-    {name: "AsuraScans", url: "https://asurascans.net/"},
-    {name: "SirenScans", url: "https://sirenscans.com/"},
-    {name: "ThunderScans", url: "https://thunderscans.com/"},
-    {name: "Utoon.net", url: "https://utoon.net/"},
-    {name: "Webtoons", url: "https://www.webtoons.com/"},
-    {name: "ValirScans", url: "https://valirscans.com/"},
-    {name: "WriterScans", url: "https://writerscans.com/"},
-    {name: "Luatoons", url: "https://luatoons.org/"},
-    {name: "LuaComic", url: "https://luacomic.org/"},
-    {name: "FlameComics", url: "https://flamecomics.xyz/"},
-    {name: "VortexScans", url: "https://vortexscans.org/"},
-    {name: "RokariComics", url: "https://rokaricomics.com/"},
-    {name: "ManhwaClan", url: "https://manhwaclan.com/"},
-    {name: "ManhwaTop", url: "https://manhwatop.com/"}
+    {name: "ManhwaTop", url: "https://manhwatop.com/"},
+    {name: "VortexScann", url: "https://vortexscann.com/"},
+    {name: "MangaDex", url: "https://mangadex.org/"},
+    {name: "Mangakakalot", url: "https://ww7.mangakakalot.tv/"}  // mirror domain often resolves :contentReference[oaicite:2]{index=2}
   ];
 
   function checkPassword() {
@@ -169,13 +153,12 @@
   function openExtension(url) {
     readerFrame.src = url;
     readerFrame.classList.remove("hidden");
-
     setTimeout(() => {
       const doc = readerFrame.contentDocument || readerFrame.contentWindow.document;
       if (!doc.body || doc.body.innerHTML.trim().length === 0) {
         window.open(url, "_blank");
-        readerFrame.classList.add("hidden");
         readerFrame.src = "";
+        readerFrame.classList.add("hidden");
       }
     }, 800);
   }
