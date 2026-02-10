@@ -13,29 +13,25 @@
     font-family: 'Space Grotesk', sans-serif;
     background: #111;
     color: #fff;
+    text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
     min-height: 100vh;
   }
-
   .hidden { display: none; }
-
   #login-container, #main-container {
     width: 100%;
     max-width: 900px;
     padding: 2rem;
   }
-
   input {
     padding: 10px;
     font-size: 1rem;
-    width: 70%;
+    width: 75%;
     margin-top: 1rem;
   }
-
   button {
     padding: 10px 20px;
     margin-top: 1rem;
@@ -44,10 +40,9 @@
     background: #2196f3;
     border: none;
     border-radius: 5px;
-    color: white;
+    color: #fff;
     transition: 0.2s;
   }
-
   button:hover { background: #1769aa; }
 
   #extensions {
@@ -56,7 +51,6 @@
     gap: 12px;
     margin-top: 1.5rem;
   }
-
   .ext-btn {
     padding: 0.8rem;
     background: #222;
@@ -65,7 +59,6 @@
     font-weight: 600;
     transition: 0.2s;
   }
-
   .ext-btn:hover { background: #444; }
 
   iframe {
@@ -82,14 +75,13 @@
   }
 </style>
 </head>
-
 <body>
 
 <div id="login-container">
   <h1>Welcome to Manhyo Reader</h1>
   <input type="password" id="password" placeholder="Enter password">
   <button onclick="checkPassword()">Enter</button>
-  <p id="dynamic-text">Get ready for updates...</p>
+  <p id="dynamic-text">Preparing your reader...</p>
 </div>
 
 <div id="main-container" class="hidden">
@@ -109,11 +101,9 @@
 
   const statusMessages = [
     "Select a source to begin reading!",
-    "Discover new chapters every day!",
-    "Find your favorite manhwa titles here!",
-    "Click a button to open a site!",
-    "Sites open if embedding is allowed!",
-    "If blocked, the site will open in a new tab!"
+    "If a site won’t embed it will open in a new tab!",
+    "Check out the extensions below!",
+    "Stay tuned for updates!"
   ];
 
   function updateDynamicText() {
@@ -123,10 +113,20 @@
   updateDynamicText();
 
   const extensions = [
-    {name: "ManhwaTop", url: "https://manhwatop.com/"},
-    {name: "VortexScann", url: "https://vortexscann.com/"},
-    {name: "MangaDex", url: "https://mangadex.org/"},
-    {name: "Mangakakalot", url: "https://ww7.mangakakalot.tv/"}  // mirror domain often resolves :contentReference[oaicite:2]{index=2}
+    {name: "Comix.to", url: "https://comix.to/"},
+    {name: "EZManga.org", url: "https://ezmanga.org/"},
+    {name: "SirenScans", url: "https://sirenscans.com/"},
+    {name: "ThunderScans.com", url: "https://thunderscans.com/"},
+    {name: "Utoon.net", url: "https://utoon.net/"},
+    {name: "Webtoons.com", url: "https://www.webtoons.com/"},
+    {name: "ValirScans.com", url: "https://valirscans.com/"},
+    {name: "WriterScans.com", url: "https://writerscans.com/"},
+    {name: "LuaToons.org", url: "https://luatoons.org/"},
+    {name: "LuaComic.org", url: "https://luacomic.org/"},
+    {name: "FlameComics.xyz", url: "https://flamecomics.xyz/"},
+    {name: "VortexScans.org", url: "https://vortexscans.org/"},
+    {name: "RokariComics.com", url: "https://rokaricomics.com/"},
+    {name: "ManhwaClan.com", url: "https://manhwaclan.com/"}
   ];
 
   function checkPassword() {
@@ -140,7 +140,6 @@
   }
 
   function loadExtensions() {
-    extensionsDiv.innerHTML = "";
     extensions.forEach(ext => {
       const btn = document.createElement("button");
       btn.className = "ext-btn";
@@ -160,10 +159,9 @@
         readerFrame.src = "";
         readerFrame.classList.add("hidden");
       }
-    }, 800);
+    }, 1000);
   }
 </script>
 
 </body>
 </html>
-
