@@ -1,168 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manhyo Reader</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
-
-<style>
-  body {
-    margin: 0;
-    font-family: 'Space Grotesk', sans-serif;
-    background: #111;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    min-height: 100vh;
-  }
-
-  .hidden { display: none; }
-
-  #login-container, #main-container {
-    width: 100%;
-    max-width: 900px;
-    padding: 2rem;
-  }
-
-  input {
-    padding: 10px;
-    font-size: 1rem;
-    width: 70%;
-    margin-top: 1rem;
-  }
-
-  button {
-    padding: 10px 20px;
-    margin-top: 1rem;
-    font-size: 1rem;
-    cursor: pointer;
-    background: #2196f3;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    transition: 0.2s;
-  }
-
-  button:hover { background: #1769aa; }
-
-  #extensions {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 12px;
-    margin-top: 1.5rem;
-  }
-
-  .ext-btn {
-    padding: 0.8rem;
-    background: #222;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: 0.2s;
-  }
-
-  .ext-btn:hover { background: #444; }
-
-  iframe {
-    width: 100%;
-    height: 70vh;
-    border: none;
-    margin-top: 1rem;
-  }
-
-  #dynamic-text {
-    margin-top: 10px;
-    font-size: 1.15rem;
-    color: #ffeb3b;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manhyo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: #111;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    #login-container, #main-container {
+      width: 100%;
+      max-width: 900px;
+      margin: 50px auto;
+      text-align: center;
+    }
+    input[type="password"] {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+      width: 200px;
+    }
+    button {
+      padding: 10px 20px;
+      margin-left: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      background: #444;
+      color: #fff;
+    }
+    #extension-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+    .extension-btn {
+      padding: 15px;
+      background: #222;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .extension-btn:hover {
+      background: #555;
+    }
+    #extension-frame-container {
+      margin-top: 20px;
+      position: relative;
+    }
+    #extension-frame {
+      width: 100%;
+      height: 500px;
+      border: none;
+      display: none;
+      border-radius: 10px;
+    }
+    #fullscreen-btn {
+      margin-top: 10px;
+      padding: 8px 15px;
+      display: none;
+    }
+    .fullscreen-frame {
+      position: fixed !important;
+      top: 0;
+      left: 0;
+      width: 100% !important;
+      height: 100% !important;
+      z-index: 9999;
+      border-radius: 0;
+    }
+    #bottom-text {
+      margin-top: 40px;
+      font-size: 18px;
+      line-height: 1.6;
+      color: #eee;
+    }
+  </style>
 </head>
-
 <body>
 
-<div id="login-container">
-  <h1>Welcome to Manhyo Reader</h1>
-  <input type="password" id="password" placeholder="Enter password">
-  <button onclick="checkPassword()">Enter</button>
-  <p id="dynamic-text">Get ready for updates...</p>
-</div>
+  <div id="login-container">
+    <h1>Welcome to Manhyo</h1>
+    <p>Enter Password:</p>
+    <input type="password" id="password">
+    <button onclick="checkPassword()">Enter</button>
+  </div>
 
-<div id="main-container" class="hidden">
-  <h1>Manhyo Extensions</h1>
-  <div id="extensions"></div>
-  <iframe id="reader-frame" class="hidden"></iframe>
-</div>
+  <div id="main-container" style="display:none;">
+    <h1>Manhyo - Your Manhwa Reader</h1>
+    
+    <div id="extension-grid">
+      <div class="extension-btn" onclick="openExtension('https://asurascans.com')">Asura Scans</div>
+      <div class="extension-btn" onclick="openExtension('https://comix.to')">Comix.to</div>
+      <div class="extension-btn" onclick="openExtension('https://ezmanga.org')">EZ Manga</div>
+      <div class="extension-btn" onclick="openExtension('https://sirenscans.com')">Siren Scans</div>
+      <div class="extension-btn" onclick="openExtension('https://thunderscans.com')">Thunder Scans</div>
+      <div class="extension-btn" onclick="openExtension('https://utoon.net')">Utoon</div>
+      <div class="extension-btn" onclick="openExtension('https://webtoons.com')">Webtoons</div>
+      <div class="extension-btn" onclick="openExtension('https://valirscans.com')">Valir Scans</div>
+      <div class="extension-btn" onclick="openExtension('https://writerscans.com')">Writer Scans</div>
+      <div class="extension-btn" onclick="openExtension('https://luatoons.org')">Luattoons</div>
+      <div class="extension-btn" onclick="openExtension('https://luacomic.org')">Lua Comic</div>
+      <div class="extension-btn" onclick="openExtension('https://flamecomics.xyz')">Flame Comics</div>
+      <div class="extension-btn" onclick="openExtension('https://vortexscans.org')">Vortex Scans</div>
+      <div class="extension-btn" onclick="openExtension('https://rokaricomics.com')">Rokari Comics</div>
+      <div class="extension-btn" onclick="openExtension('https://manhwaclan.com')">Manhwa Clan</div>
+    </div>
 
-<script>
-  const PASSWORD = "D3r5t0n3";
-  const loginContainer = document.getElementById("login-container");
-  const mainContainer = document.getElementById("main-container");
-  const passwordInput = document.getElementById("password");
-  const extensionsDiv = document.getElementById("extensions");
-  const readerFrame = document.getElementById("reader-frame");
-  const dynamicText = document.getElementById("dynamic-text");
+    <div id="extension-frame-container">
+      <iframe id="extension-frame"></iframe>
+      <button id="fullscreen-btn">Fullscreen</button>
+    </div>
 
-  const statusMessages = [
-    "Select a source to begin reading!",
-    "Discover new chapters every day!",
-    "Find your favorite manhwa titles here!",
-    "Click a button to open a site!",
-    "Sites open if embedding is allowed!",
-    "If blocked, the site will open in a new tab!"
-  ];
+    <div id="bottom-text">
+      <p>Welcome to the BEST manhwa site ever! Experience INCREDIBLE reading with your favorite extensions! Discover AMAZING stories, EXCLUSIVE content, and UNLIMITED chapters!</p>
+    </div>
+  </div>
 
-  function updateDynamicText() {
-    dynamicText.textContent = statusMessages[Math.floor(Math.random() * statusMessages.length)];
-  }
-  setInterval(updateDynamicText, 3000);
-  updateDynamicText();
-
-  const extensions = [
-    {name: "ManhwaTop", url: "https://manhwatop.com/"},
-    {name: "VortexScann", url: "https://vortexscann.com/"},
-    {name: "MangaDex", url: "https://mangadex.org/"},
-    {name: "Mangakakalot", url: "https://ww7.mangakakalot.tv/"}  // mirror domain often resolves :contentReference[oaicite:2]{index=2}
-  ];
-
-  function checkPassword() {
-    if (passwordInput.value === PASSWORD) {
-      loginContainer.classList.add("hidden");
-      mainContainer.classList.remove("hidden");
-      loadExtensions();
-    } else {
-      alert("Incorrect password!");
-    }
-  }
-
-  function loadExtensions() {
-    extensionsDiv.innerHTML = "";
-    extensions.forEach(ext => {
-      const btn = document.createElement("button");
-      btn.className = "ext-btn";
-      btn.textContent = ext.name;
-      btn.onclick = () => openExtension(ext.url);
-      extensionsDiv.appendChild(btn);
-    });
-  }
-
-  function openExtension(url) {
-    readerFrame.src = url;
-    readerFrame.classList.remove("hidden");
-    setTimeout(() => {
-      const doc = readerFrame.contentDocument || readerFrame.contentWindow.document;
-      if (!doc.body || doc.body.innerHTML.trim().length === 0) {
-        window.open(url, "_blank");
-        readerFrame.src = "";
-        readerFrame.classList.add("hidden");
+  <script>
+    function checkPassword() {
+      const pw = document.getElementById("password").value;
+      if(pw === "D3r5t0n3") {
+        document.getElementById("login-container").style.display = "none";
+        document.getElementById("main-container").style.display = "block";
+      } else {
+        alert("Wrong password!");
       }
-    }, 800);
-  }
-</script>
+    }
 
+    function openExtension(url) {
+      const frame = document.getElementById("extension-frame");
+      const btn = document.getElementById("fullscreen-btn");
+      
+      frame.src = url;
+      frame.style.display = "block";
+      frame.classList.remove("fullscreen-frame");
+      btn.style.display = "inline-block";
+      
+      btn.onclick = () => {
+        frame.classList.add("fullscreen-frame");
+      };
+
+      document.addEventListener("keydown", function escHandler(e) {
+        if(e.key === "Escape") {
+          frame.classList.remove("fullscreen-frame");
+          document.removeEventListener("keydown", escHandler);
+        }
+      });
+    }
+  </script>
 </body>
 </html>
+
