@@ -1,30 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manhyo Reader</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manhyo Reader</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    font-family: 'Space Grotesk', sans-serif;
+    background: #111;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+  }
+
+  .hidden { display: none; }
+
+  #login-container, #main-container {
+    width: 100%;
+    max-width: 900px;
+    padding: 2rem;
+  }
+
+  input[type="password"] {
+    padding: 10px;
+    font-size: 1rem;
+    width: 70%;
+    margin-top: 1rem;
+  }
+
+  button {
+    padding: 10px 20px;
+    margin-top: 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: #2196f3;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    transition: 0.2s;
+  }
+  button:hover { background: #1769aa; }
+
+  #extensions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-top: 1.5rem;
+  }
+
+  .ext-btn {
+    padding: 0.8rem;
+    background: #222;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+  }
+  .ext-btn:hover { background: #444; }
+
+  iframe {
+    width: 100%;
+    height: 70vh;
+    border: none;
+    margin-top: 1rem;
+  }
+
+  #dynamic-text {
+    margin-top: 15px;
+    font-size: 1.1rem;
+    color: #ffeb3b;
+    font-weight: 600;
+  }
+</style>
 </head>
+
 <body>
-  <div id="login-screen">
-    <h1>Welcome to Manhyo Reader</h1>
-    <input type="password" id="password" placeholder="Enter password">
-    <button id="login-btn">Enter</button>
-    <p class="fun-text">Explore top manga & manhwa sources below!</p>
-  </div>
 
-  <div id="main-screen" class="hidden">
-    <h1>Manhyo Extensions</h1>
-    <div id="extensions"></div>
+<div id="login-container">
+  <h1>Welcome to Manhyo Reader</h1>
+  <input type="password" id="password" placeholder="Enter Password">
+  <button onclick="checkPassword()">Enter</button>
+  <p id="dynamic-text">Get ready for updates...</p>
+</div>
 
-    <div id="iframe-container">
-      <iframe id="reader-frame" class="hidden"></iframe>
-    </div>
-  </div>
+<div id="main-container" class="hidden">
+  <h1>Manhyo Extensions</h1>
+  <div id="extensions"></div>
 
-  <script src="script.js"></script>
+  <p id="dynamic-text">Loading amazing content...</p>
+
+  <iframe id="reader-frame" class="hidden"></iframe>
+</div>
+
+<script>
+  const PASSWORD = "D3r5t0n3";
+  const loginContainer = document.getElementById("login-container");
+  const mainContainer = document.getElementById("main-container");
+  const passwordInput = document.getElementById("password");
+  const extensionsDiv = document.getElementById("extensions");
+  const readerFrame = document.getElementById("reader-frame");
+
+  const dynamicTextElems = document.querySelectorAll("#dynamic-text");
+
+  const statusMessages = [
+    "New chapters might drop soon!",
+    "Check your favorite extensions above!",
+    "Stay tuned — latest manhwa updates!",
+    "Explore SirenScans, ValirScans, and more!",
+    "Ready to read? Click an extension!",
+    "Keep your eyes on ManhwaClan for more!",
+    "Discover hidden gems from FlameComics!"
+  ];
+
+  function updateDynamicText() {
+    const random = statusMessages[Math.floor(Math.random() * statusMessages.length)];
+    dynamicTextElems.forEach(el => el.textContent = random);
+  }
+
+  setInterval(updateDynamicText, 3000); // updates every 3 seconds:contentReference[oaicite:1]{index=1}
+  updateDynamicText(); // initial run
+
+  const extensions = [
+    {name: "AsuraScans", url: "https://asurascans.net/"},
+    {name: "SirenScans", url: "https://sirenscans.com/"},
+    {name: "ThunderScans", url: "https://thunderscans.com/"},
+    {name: "Utoon.net", url: "https://utoon.net/"},
+    {name: "Webtoons", url: "https://www.webtoons.com/"},
+    {name: "ValirScans", url: "https://valirscans.com/"},
+    {name: "WriterScans", url: "https://writerscans.com/"},
+    {name: "Luatoons", url: "https://luatoons.org/"},
+    {name: "LuaComic", url: "https://luacomic.org/"},
+    {name: "FlameComics", url: "https://flamecomics.xyz/"},
+    {name: "VortexScans", url: "https://vortexscans.org/"},
+    {name: "RokariComics", url: "https://rokaricomics.com/"},
+    {name: "ManhwaClan", url: "https://manhwaclan.com/"},
+    {name: "ManhwaTop", url: "https://manhwatop.com/"}
+  ];
+
+  function checkPassword() {
+    if (passwordInput.value === PASSWORD) {
+      loginContainer.classList.add("hidden");
+      mainContainer.classList.remove("hidden");
+      loadExtensions();
+    } else {
+      alert("Incorrect password!");
+    }
+  }
+
+  function loadExtensions() {
+    extensionsDiv.innerHTML = "";
+    extensions.forEach(ext => {
+      const btn = document.createElement("button");
+      btn.className = "ext-btn";
+      btn.textContent = ext.name;
+      btn.onclick = () => openExtension(ext.url);
+      extensionsDiv.appendChild(btn);
+    });
+  }
+
+  function openExtension(url) {
+    readerFrame.src = url;
+    readerFrame.classList.remove("hidden");
+
+    setTimeout(() => {
+      const doc = readerFrame.contentDocument || readerFrame.contentWindow.document;
+      if (!doc.body || doc.body.innerHTML.trim().length === 0) {
+        window.open(url, "_blank");
+        readerFrame.classList.add("hidden");
+        readerFrame.src = "";
+      }
+    }, 800);
+  }
+</script>
+
 </body>
 </html>
-
